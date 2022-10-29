@@ -96,4 +96,39 @@ public class GroupRepository {
             }
         }
     }
+
+    // Phương thức dùng để delete Groups theo ID:
+    public void deleteGroup(short id){
+        Session session = null;
+        try {
+            session = hibernateUtils.openSession();
+            Group group = session.load(Group.class, id);
+            session.beginTransaction();
+            session.delete(group);
+            session.getTransaction().commit();
+
+        } finally {
+            if(session != null){
+                session.close();
+            }
+        }
+    }
+
+    // Phương thức check Group đã tồn tại hay chưa theo ID:
+    public boolean isGroupExistsById(short id){
+        Group group = getGroupById(id);
+        if(group == null){
+            return false;
+        }
+        return true;
+    }
+
+    // Phương thức check Group đã tồn tại hay chưa theo Name:
+    public boolean isGroupExistsByName(String name){
+        List<Group> group = getGroupByName(name);
+        if(group.size() > 0){
+            return true;
+        }
+        return false;
+    }
 }
